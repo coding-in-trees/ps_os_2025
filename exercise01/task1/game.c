@@ -95,8 +95,8 @@ void init_field(int** field,int width, int height, double density) {
 }
 
 int generate_PBM(const int** field, int width, int height, int step) {
-	char* fileName = NULL;
-	int size = asprintf(&fileName, "gol_%05d.pbm", step);
+    char fileName[14];  // Fixed size (gol_00000.pbm = 14 chars)
+    int size = snprintf(fileName, sizeof(fileName), "gol_%05d.pbm", step);
 	if (size < 0)
 	{
 		return EXIT_FAILURE;
@@ -114,7 +114,6 @@ int generate_PBM(const int** field, int width, int height, int step) {
 	}
 
 	fclose(pbm);
-	free(fileName);
 	return EXIT_SUCCESS;
 }
 
