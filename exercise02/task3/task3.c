@@ -95,6 +95,6 @@ int main(int argc, char const* argv[]) {
 			return EXIT_FAILURE;
 		}
 	}
-	printf("Done\n");
+	printf("Done.\n");
 	return EXIT_SUCCESS;
 }
