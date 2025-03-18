@@ -6,7 +6,7 @@ all: main
 .PHONY: create_key
 create_key:
 	@echo "Creating key.c"
-	@echo """#include \"key.h\"\n\nconst char* get_key() {\n\treturn \"$(shell whoami)\"; // here you need to replace \"your_username\" with the username of your account. Look at whoami(1).\n}""" > key.c
+	@echo -e """#include \"key.h\"\n\nconst char* get_key() {\n\treturn \"$(shell whoami)\"; // here you need to replace \"your_username\" with the username of your account. Look at whoami(1).\n}""" > key.c
 
 .PHONY: clean
 clean:
