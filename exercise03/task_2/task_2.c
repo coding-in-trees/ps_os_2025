@@ -11,7 +11,8 @@ void string_shift_right(int arg_index, char* input, const char* original) {
 	char shifted_input[input_length];
 
 	for (size_t char_index = 0; char_index < input_length; ++char_index) {
-		size_t new_position = (char_index + 2) / input_length;
+		// use % instead of / to treat indices on cyclic array
+		size_t new_position = (char_index + 2) % input_length;
 		shifted_input[new_position] = input[char_index];
 	}
 
@@ -35,7 +36,8 @@ int main(int argc, const char** argv) {
 		strcpy(shared_strings[arg_index], argv[arg_index]);
 	}
 
-	for (int arg_index = 0; arg_index <= argc; arg_index++) {
+	// only iterate untill arg_index < argc
+	for (int arg_index = 0; arg_index < argc; arg_index++) {
 		pid_t pid = fork();
 		if (pid == -1) {
 			perror("Could not create fork");
@@ -47,10 +49,14 @@ int main(int argc, const char** argv) {
 		}
 	}
 
-	for (int arg_index = 0; arg_index <= argc; arg_index++) {
-		pthread_join(arg_index, NULL);
+	// only iterate untill arg_index < argc
+	for (int arg_index = 0; arg_index < argc; arg_index++) {
+		// wait for fork instead of pthread
+		wait(NULL);
+		// free memory allocated for shared strings
+		free(shared_strings[arg_index]);
 	}
 
-	printf("Done.");
+	printf("Done.\n");
 	return EXIT_SUCCESS;
 }
