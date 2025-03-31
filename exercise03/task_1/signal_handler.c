@@ -40,6 +40,7 @@ void signalHandler(int signal) {
 			}
 			break;
 		case SIGCONT: msg = "Received SIGCONT\n"; break;
+		default: msg = "Received unhandled signal";
 	}
 	write(STDOUT_FILENO, msg, strlen(msg));
 }

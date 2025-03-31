@@ -2,6 +2,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 int64_t accuumulation = 0;
@@ -18,7 +19,7 @@ int main(int argc, char const* argv[]) {
 		printf("Usage ./%s <N>\n", argv[0]);
 	}
 	int64_t n = atoll(argv[1]);
-	printf("Accumulation: %lli\n", accuumulation);
+	printf("Accumulation: %ld\n", accuumulation);
 
 	int child = fork();
 	if (child == -1) {
@@ -33,7 +34,7 @@ int main(int argc, char const* argv[]) {
 	}
 	// finish sub process
 	wait(NULL);
-	printf("Accumulation: %lli\n", accuumulation);
+	printf("Accumulation: %ld\n", accuumulation);
 
 	// main
 	pthread_t t;
@@ -43,6 +44,6 @@ int main(int argc, char const* argv[]) {
 		return EXIT_FAILURE;
 	}
 	pthread_join(t, NULL);
-	printf("Accumulation: %lli\n", accuumulation);
+	printf("Accumulation: %ld\n", accuumulation);
 	return EXIT_SUCCESS;
 }

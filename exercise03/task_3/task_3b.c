@@ -11,6 +11,12 @@ struct threadState {
 void *getSumFromFile(void* threadState) {
     struct threadState *s = (struct threadState*)threadState;
     FILE *f = fopen(s -> fileName, "r");
+    if (f == NULL)
+    {
+        perror("fopen()");
+        return NULL;
+    }
+    
     int num;
     while (fscanf(f, "%d", &num) != EOF)
     {

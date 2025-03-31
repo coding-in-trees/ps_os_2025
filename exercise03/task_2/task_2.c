@@ -11,7 +11,8 @@ void string_shift_right(int arg_index, char* input, const char* original) {
 	char shifted_input[input_length];
 
 	for (size_t char_index = 0; char_index < input_length; ++char_index) {
-		// use % instead of / to treat indices on cyclic array
+		// FOUND use % instead of / to treat indices on cyclic array
+		// size_t new_position = (char_index + 2) / input_length;
 		size_t new_position = (char_index + 2) % input_length;
 		shifted_input[new_position] = input[char_index];
 	}
@@ -25,9 +26,13 @@ void string_shift_right(int arg_index, char* input, const char* original) {
 }
 
 int main(int argc, const char** argv) {
-	char* shared_strings[argc];
+	// FOUND save copy of argv on heap
+	// char* shared_strings[argc];
+	char** shared_strings = malloc(argc * sizeof(char*));
 	for (int arg_index = 0; arg_index < argc; ++arg_index) {
-		size_t arg_length = strlen(argv[arg_index]);
+		// FOUND strlen is length without null terminator, need to add 1
+		// size_t arg_length = strlen(argv[arg_index]);
+		size_t arg_length = strlen(argv[arg_index]) + 1;
 		shared_strings[arg_index] = malloc(arg_length * sizeof(char));
 		if (shared_strings[arg_index] == NULL) {
 			fprintf(stderr, "Could not allocate memory.\n");
@@ -36,7 +41,8 @@ int main(int argc, const char** argv) {
 		strcpy(shared_strings[arg_index], argv[arg_index]);
 	}
 
-	// only iterate untill arg_index < argc
+	// FOUND only iterate untill arg_index < argc
+	// for (int arg_index = 0; arg_index <= argc; arg_index++) {
 	for (int arg_index = 0; arg_index < argc; arg_index++) {
 		pid_t pid = fork();
 		if (pid == -1) {
@@ -49,13 +55,18 @@ int main(int argc, const char** argv) {
 		}
 	}
 
-	// only iterate untill arg_index < argc
+	// FOUND only iterate untill arg_index < argc
+	// for (int arg_index = 0; arg_index <= argc; arg_index++) {
 	for (int arg_index = 0; arg_index < argc; arg_index++) {
-		// wait for fork instead of pthread
+		// FOUND wait for fork instead of pthread
+		// 		pthread_join(arg_index, NULL);
 		wait(NULL);
-		// free memory allocated for shared strings
+		// FOUND free memory allocated for shared strings
 		free(shared_strings[arg_index]);
 	}
+
+	// FOUND free shared strings
+	free(shared_strings);
 
 	printf("Done.\n");
 	return EXIT_SUCCESS;
