@@ -1,4 +1,4 @@
-CFLAGS = -std=c11 -Wall -Wextra -Wpedantic
+CFLAGS = -std=c11 -Wall -Wextra -Wpedantic -D_POSIX_C_SOURCE=200809L
 
 .PHONY: all
 all: client server

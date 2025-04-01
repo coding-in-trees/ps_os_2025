@@ -1,5 +1,5 @@
-#include "server.h"
 #include <fcntl.h>
+#include <limits.h>
 #include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +7,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#define FIFO_DIR "/tmp/csbb9638_"
+#define MAX_CLIENTS 10
+#define BUFFER_SIZE PIPE_BUF
 
 void cleanup_fifos(char* clients[], int num_clients) {
 	for (int i = 0; i < num_clients; i++) {
@@ -59,7 +63,7 @@ int newMessage(struct pollfd fds[], char* clients[], int clientRef, int* message
 	buffer[bytes_read] = '\0';
 	(*message_count)++;
 	printf("Message %d: \"%s\" from %s\n", *message_count, buffer, clients[clientRef]);
-    return 1;
+	return 1;
 }
 
 void clientHangup(struct pollfd fds[], char* clients[], int* num_clients, int* clientRef) {
@@ -94,22 +98,17 @@ int main(int argc, char* argv[]) {
 
 	while (num_clients > 0) {
 		if (poll(fds, num_clients, -1) == -1) {
-			perror("poll");
 			cleanup_fifos(clients, num_clients);
 			return EXIT_FAILURE;
 		}
-        printf("Polling\n");
 		for (int cRef = 0; cRef < num_clients; cRef++) {
-            printf("Checking events for %s %i\n", clients[cRef], fds[cRef].revents & POLLIN);
-            fflush(stdout);
 			if (!(fds[cRef].revents & POLLIN)) {
-                continue;
+				continue;
 			}
-            if (newMessage(fds, clients, cRef, &message_count))
-            {
-                continue;
-            }
-            clientHangup(fds, clients, &num_clients, &cRef);
+			if (newMessage(fds, clients, cRef, &message_count)) {
+				continue;
+			}
+			clientHangup(fds, clients, &num_clients, &cRef);
 		}
 	}
 

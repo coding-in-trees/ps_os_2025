@@ -1,9 +1,13 @@
-#include "server.h"
 #include <fcntl.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+#define FIFO_DIR "/tmp/csbb9638_"
+#define MAX_CLIENTS 10
+#define BUFFER_SIZE PIPE_BUF
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
