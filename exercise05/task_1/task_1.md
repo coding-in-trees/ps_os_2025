@@ -1,0 +1,3 @@
+- What is the range of possible priorities defined by POSIX? 2 to 31
+  - Are you limited to this range on your system? no it goes from 2 to 2^15-1
+  - What is more important a task with priority 2 or 99 (gets scheduled first)? task with prio 99. Because higher is better.
