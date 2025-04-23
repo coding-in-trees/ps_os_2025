@@ -2,6 +2,10 @@
     "files.associations": {
         "stdlib.h": "c",
         "fcntl.h": "c",
-        "server.h": "c"
+        "server.h": "c",
+        "stdio.h": "c",
+        "pthread.h": "c",
+        "myqueue.h": "c",
+        "stdbool.h": "c"
     }
 }
