@@ -105,6 +105,7 @@ int main(int argc, char const* argv[]) {
     
     pthread_mutex_destroy(&lockQueue);
     pthread_cond_destroy(&elementsAvailable);
+    free(cThreads);
     printf("Final sum: %d\n", sum);
 	return EXIT_SUCCESS;
 }

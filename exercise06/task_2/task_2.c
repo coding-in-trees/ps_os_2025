@@ -99,6 +99,7 @@ int main(int argc, char const* argv[]) {
         free(localSum);
     }
     
+    free(cThreads);
     pthread_mutex_destroy(&lockQueue);
     printf("Final sum: %d\n", sum);
 	return EXIT_SUCCESS;
