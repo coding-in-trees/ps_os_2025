@@ -18,11 +18,20 @@ typedef struct {
 void* dine(void* arg) {
 	philosopher_t philosopher_parameters = *(philosopher_t*)arg;
 	for (int i = 0; i < EAT_ITERATIONS; ++i) {
-		pthread_mutex_lock(&philosopher_parameters.chopstick[RIGHT_CHOPSTICK(philosopher_parameters.id)]);
-		pthread_mutex_lock(&philosopher_parameters.chopstick[LEFT_CHOPSTICK(philosopher_parameters.id)]);
+		pthread_mutex_t *left = &philosopher_parameters.chopstick[RIGHT_CHOPSTICK(philosopher_parameters.id)];
+		pthread_mutex_t *right = &philosopher_parameters.chopstick[LEFT_CHOPSTICK(philosopher_parameters.id)];
+		if (philosopher_parameters.id == 0)
+		{
+			pthread_mutex_lock(left);
+			pthread_mutex_lock(right);
+		} else {
+			pthread_mutex_lock(right);
+			pthread_mutex_lock(left);
+		}
+
 		usleep(EAT_DURATION);
-		pthread_mutex_unlock(&philosopher_parameters.chopstick[LEFT_CHOPSTICK(philosopher_parameters.id)]);
-		pthread_mutex_unlock(&philosopher_parameters.chopstick[RIGHT_CHOPSTICK(philosopher_parameters.id)]);
+		pthread_mutex_unlock(left);
+		pthread_mutex_unlock(right);
 	}
 	printf("Philosopher %d is done eating!\n", philosopher_parameters.id);
 

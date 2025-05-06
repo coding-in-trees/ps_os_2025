@@ -11,7 +11,7 @@
 
 #ifdef THREAD_POOL
 	#include "thread_pool.h"
-	#define POOL_SIZE 5
+	#define POOL_SIZE 200
 #else
 	#include <pthread.h>
 #endif
