@@ -7,6 +7,8 @@
         "pthread.h": "c",
         "myqueue.h": "c",
         "stdbool.h": "c",
-        "queue.h": "c"
+        "queue.h": "c",
+        "semaphore.h": "c",
+        "socket.h": "c"
     }
 }
