@@ -11,6 +11,8 @@
         "semaphore.h": "c",
         "socket.h": "c",
         "stdint.h": "c",
-        "stdatomic.h": "c"
+        "stdatomic.h": "c",
+        "membench.h": "c",
+        "mman.h": "c"
     }
 }

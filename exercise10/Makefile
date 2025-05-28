@@ -1,39 +1,31 @@
-CPPFLAGS += -D_POSIX_C_SOURCE=200809L -D_DEFAULT_SOURCE -D_DARWIN_C_SOURCE -D_BSD_SOURCE
-CFLAGS += -std=c11 -Wall -Wextra -pedantic -pthread -g -O3
-LDFLAGS += -pthread
+# Use this file at your own risk.
+# Always ensure that the required files are actually put into the archive,
+# and that no additional files are archived.
+# You can use the zipinfo command to check the file structure of an existing archive.
 
-TARGETS ?= dummy_allocator
+USERNAME = csbb9638
+EXERCISE = 10
 
-COMMON_OBJS = membench.o allocator_tests.o main.o
+# This excludes some common directories automatically.
+# Adjust this list according to your setup.
+# The zip command will also show which files are put into the archive.
+# Check this output to ensure that only the required files are included.
+EXCLUDE_PATTERNS = "README.md" "**.tar" "**.vscode/*" "**.idea/*" "**__MACOSX/*" "**.DS_Store/*" "**.dSYM/*" "task_1/secret"
+
+ARCHIVE= "../exc$(EXERCISE)_$(USERNAME).zip"
 
 .PHONY: all
-all: $(TARGETS)
+all: zip
+
+.PHONY: zip
+zip: clean
+	$(RM) $(ARCHIVE)
+	zip -r $(ARCHIVE) . --exclude $(EXCLUDE_PATTERNS)
 
 .PHONY: clean
 clean:
-	$(RM) $(TARGETS) *.o *_global *_local
-
-membench.o: membench.h
-allocator_tests.o: allocator_tests.h
-main.o: allocator.h
-
-%_global.o: CPPFLAGS += -DTHREAD_LOCAL_ALLOCATOR=0
-%_local.o: CPPFLAGS += -DTHREAD_LOCAL_ALLOCATOR=1
-
-# Dummy allocator
-dummy_allocator.o: allocator.h allocator_tests.h membench.h
-
-# Free list allocator
-free_list_allocator_%.o: free_list_allocator.c 
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
-
-# Best fit allocator
-best_fit_allocator_%.o: best_fit_allocator.c
-	$(CC) $(CPPFLAGS)  $(CFLAGS) -c -o $@ $<
-
-dummy_allocator: $(COMMON_OBJS)
-
-free_list_allocator_global: $(COMMON_OBJS)
-free_list_allocator_local: $(COMMON_OBJS)
-best_fit_allocator_global: $(COMMON_OBJS)
-best_fit_allocator_local: $(COMMON_OBJS)
+	@for dir in task_?; do \
+	  if [ -f "$$dir/Makefile" ] || [ -f "$$dir/makefile" ]; then \
+	    $(MAKE) -C "$$dir" clean; \
+	  fi \
+	done
